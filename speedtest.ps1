@@ -1,14 +1,18 @@
 Param(
-    [Parameter(Mandatory=$True)]
-    #should be c:\path\to\file.csv.  
+    [Parameter(Mandatory=$True, 
+    HelpMessage= "Format: c:\path\to\file.csv."
+    )]
     $outputpath,
 
-    [Parameter(Mandatory=$True)]
-    #format: c:\path\to\file
+    [Parameter(Mandatory=$True,
+    HelpMessage= "Format: c:\path\to\file.  Extension (i.e. .DAT) optional."
+    )]
     $tempfile,
 
-    [Parameter(Mandatory=$True)]
-    #format: follows powershell.  1GB, 2MB, 3KB, etc.  Reccomended: 1GB or larger.  
+    [Parameter(Mandatory=$True,
+    HelpMessage="Enclose in parenthesis.  (1GB), (2MB), (3KB), etc."
+    )]
+    #Reccomended: 1GB or larger.  
     $size
 )
 
@@ -16,7 +20,7 @@ Param(
 while ($true){
 	$now = Get-Date -format "dd-MMM-yyyy HH:mm:ss.fff"
 	$epoch = get-date -UFormat %s
-
+    
 	#write 
 	$write_ms = measure-command {FSUTIL.EXE file createnew $tempfile ($size)}
 
