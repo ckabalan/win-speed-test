@@ -1,17 +1,31 @@
-#speedtest for disks
+Param(
+    [Parameter(Mandatory=$True, 
+    HelpMessage= "Format: c:\path\to\file.csv."
+    )]
+    $outputpath,
 
-$outputpath = "e:\speedtest.csv"
-$tempfile = "C:\temp\testfile.dat"
+    [Parameter(Mandatory=$True,
+    HelpMessage= "Format: c:\path\to\file.  Extension (i.e. .DAT) optional."
+    )]
+    $tempfile,
+
+    [Parameter(Mandatory=$True,
+    HelpMessage="Enclose in parenthesis.  (1GB), (2MB), (3KB), etc."
+    )]
+    #Reccomended: 1GB or larger.  
+    $size
+)
+
 
 while ($true){
 	$now = Get-Date -format "dd-MMM-yyyy HH:mm:ss.fff"
 	$epoch = get-date -UFormat %s
-
+    
 	#write 
-	$write_ms = measure-command {FSUTIL.EXE file createnew $tempfile (1GB)}
+	$write_ms = measure-command {FSUTIL.EXE file createnew $tempfile ($size)}
 
 	#read
-	$read_ms = measure-command {$bytes = [System.IO.File]::ReadAllBytes("C:\temp\testfile.dat")  }
+	$read_ms = measure-command {$bytes = [System.IO.File]::ReadAllBytes($tempfile)  }
 
 	#create object and append to table
 	$object = New-Object psobject -Property $props
